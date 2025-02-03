@@ -2,7 +2,7 @@
 import React, { useState, FormEvent } from 'react';
 import HolidayTypeSelector from '@/components/HolidayTypeSelector';
 
-interface OnDemandHoliday {
+interface OnDemandLeaveInterface {
   leaveType: string;
   startDate: string;
   endDate: string;
@@ -19,7 +19,7 @@ const OnDemandLeave: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const requestBody: OnDemandHoliday = {
+    const requestBody: OnDemandLeaveInterface = {
       leaveType: "Urlop na żądanie",
       startDate,
       endDate,
@@ -28,7 +28,7 @@ const OnDemandLeave: React.FC = () => {
     };
 
     try {
-      const res = await fetch('https://localhost:5001/api/LeaveRequests', {
+      const res = await fetch('https://localhost:5001/api/HolidayRequests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),

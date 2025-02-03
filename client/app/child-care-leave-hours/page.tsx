@@ -2,7 +2,7 @@
 import React, { useState, FormEvent } from 'react';
 import HolidayTypeSelector from '@/components/HolidayTypeSelector';
 
-interface WniosekOpiekaGodziny {
+interface ChildCareHoursInterface {
   leaveType: string;
   startDate: string;
   endDate: string;
@@ -21,7 +21,7 @@ const ChildCareHours: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const requestBody: WniosekOpiekaGodziny = {
+    const requestBody: ChildCareHoursInterface = {
       leaveType: "ChildCareLeaveDays",
       startDate,
       endDate,
