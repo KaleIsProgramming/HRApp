@@ -4,11 +4,11 @@ namespace HolidayRequestApi.Models
 {
     public enum HolidayType
     {
-        UrlopOkolicznosciowy,
-        UrlopWypoczynkowy,
-        UrlopNaZadanie,
-        OpiekaNadDzieckiemDni,
-        OpiekaNadDzieckiemGodziny
+        CircumstantialHoliday,
+        VacationHoliday,
+        OnDemandHoliday,
+        ChildCareLeaveDays,
+        ChildCareLeaveHours
     }
 
     public class HolidayRequest

@@ -21,34 +21,34 @@ namespace HolidayRequestApi.Controllers
 
             if (dto.StartDate > dto.EndDate)
             {
-                return BadRequest(new { message = "Data początkowa nie może być późniejsza niż data końcowa." });
+                return BadRequest(new { message = "The start date cannot be later than the end date." });
             }
 
 
             switch (dto.HolidayType)
             {
-                case HolidayType.UrlopOkolicznosciowy:
+                case HolidayType.CircumstantialHoliday:
                     if (string.IsNullOrWhiteSpace(dto.OccasionalType))
-                        return BadRequest(new { message = "Należy podać rodzaj urlopu okolicznościowego." });
+                        return BadRequest(new { message = "The type of circumstantial leave must be provided." });
                     if (string.IsNullOrWhiteSpace(dto.PersonName))
-                        return BadRequest(new { message = "Należy podać imię i nazwisko osoby, której dotyczy wniosek." });
+                        return BadRequest(new { message = "The full name of the person concerned by the request must be provided" });
                     break;
-                case HolidayType.UrlopNaZadanie:
+                case HolidayType.OnDemandHoliday:
                     if (string.IsNullOrWhiteSpace(dto.SapNumber))
-                        return BadRequest(new { message = "Numer SAP jest wymagany dla urlopu na żądanie." });
+                        return BadRequest(new { message = "The SAP number is required for on-demand leave." });
                     break;
-                case HolidayType.OpiekaNadDzieckiemGodziny:
+                case HolidayType.ChildCareLeaveDays:
                     if (!dto.StartTime.HasValue || !dto.EndTime.HasValue)
-                        return BadRequest(new { message = "Należy podać godzinę początkową i końcową." });
+                        return BadRequest(new { message = "The start and end time must be provided." });
                     if (dto.StartTime >= dto.EndTime)
-                        return BadRequest(new { message = "Godzina początkowa musi być wcześniejsza niż godzina końcowa." });
+                        return BadRequest(new { message = "The start time must be earlier than the end time." });
                     break;
 
             }
             _context.HolidayRequests.Add(dto);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Wniosek został pomyślnie zapisany.", id = dto.Id });
+            return Ok(new { message = "The request has been successfully saved.", id = dto.Id });
         }
     }
 }
