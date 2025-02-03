@@ -5,7 +5,7 @@ namespace HolidayRequestApi.Models
     public enum HolidayType
     {
         CircumstantialHoliday,
-        VacationHoliday,
+        VacationLeave,
         OnDemandHoliday,
         ChildCareLeaveDays,
         ChildCareLeaveHours
