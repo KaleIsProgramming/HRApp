@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LeaveRequestApi.Models
+namespace HolidayRequestApi.Models
 {
     public enum HolidayType
     {

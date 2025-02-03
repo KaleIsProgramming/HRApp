@@ -1,12 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using HolidayRequestApi.Models;
+using HolidayRequestApi.Data;
 
-namespace server.Controllers
+namespace HolidayRequestApi.Controllers
 {
-    public class HolidayRequestsController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class HolidayRequestsController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+        public HolidayRequestsController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateLeaveRequest([FromBody] HolidayRequest dto)
+        {
+
+            _context.HolidayRequests.Add(dto);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Wniosek został pomyślnie zapisany.", id = dto.Id });
         }
     }
 }
