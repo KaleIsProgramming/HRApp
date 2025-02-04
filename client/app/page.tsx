@@ -1,6 +1,7 @@
 import React from 'react';
 import HolidayTypeSelector from '@/components/LeaveTypeSelector';
 
+// "/" page(Home one)
 const Home: React.FC = () => {
   return (
     <div className="h-screen w-[30vw] mx-auto flex items-center justify-center">

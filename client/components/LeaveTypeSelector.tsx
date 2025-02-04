@@ -2,6 +2,7 @@
 import React, { useState, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
+//avaible urls
 export type LeaveType =
   | "circumstantial-leave"
   | "vacation-leave"
@@ -9,10 +10,12 @@ export type LeaveType =
   | "child-care-leave-days"
   | "child-care-leave-hours";
 
+//HTMLSelectElement that redirect you to proper form
 const LeaveTypeSelector: React.FC = () => {
   const router = useRouter();
   const [selected, setSelected] = useState<LeaveType | "">("");
 
+  //redirection handler
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const type = e.target.value as LeaveType;
     setSelected(type);

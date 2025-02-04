@@ -35,6 +35,7 @@ const ChildCareHours: React.FC = () => {
     comment: ""
   });
 
+  //Front End validation handling
   const validate = () => {
     let valid = true;
     const newErrors = {
@@ -75,7 +76,7 @@ const ChildCareHours: React.FC = () => {
     setErrors(newErrors);
     return valid;
   };
-
+//Front-End connection with Back-End
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     if (!validate()) return;
     e.preventDefault();

@@ -11,6 +11,7 @@ export default function RootLayout({
 }: {
   children: ReactNode;
 }) {
+  //Main App layout
   return (
     <html lang="en">
       <body className='bg-[#f0ebf8]'>{children}</body>

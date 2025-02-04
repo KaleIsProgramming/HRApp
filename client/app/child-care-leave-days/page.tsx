@@ -27,6 +27,7 @@ const ChildCareLeaveDays: React.FC = () => {
     comment: ""
   });
 
+  //Front End validation handling
   const validate = () => {
     let valid = true;
     const newErrors = { startDate: "", endDate: "", comment: "" };
@@ -50,6 +51,7 @@ const ChildCareLeaveDays: React.FC = () => {
     return valid;
   };
 
+  //Front-End connection with Back-End
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;

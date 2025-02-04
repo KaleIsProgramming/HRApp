@@ -31,6 +31,7 @@ const OnDemandLeave: React.FC = () => {
     comment: ""
   });
 
+  //Front End validation handling
   const validate = () => {
     let valid = true;
     const newErrors = { startDate: "", endDate: "", sapNumber: "", comment: "" };
@@ -61,6 +62,7 @@ const OnDemandLeave: React.FC = () => {
     return valid;
   };
 
+  //Front-End connection with Back-End
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
