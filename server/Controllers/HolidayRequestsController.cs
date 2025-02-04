@@ -19,6 +19,12 @@ namespace HolidayRequestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateLeaveRequest([FromBody] HolidayRequest dto)
         {
+            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+            if (string.IsNullOrEmpty(authHeader) || authHeader != "Bearer hello_backend")
+            {
+                return Unauthorized(new { message = "Nieautoryzowany dostęp." });
+            }
+
             TimeSpan? parsedStartTime = null;
             TimeSpan? parsedEndTime = null;
 

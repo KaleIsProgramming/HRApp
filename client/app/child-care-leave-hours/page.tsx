@@ -92,7 +92,10 @@ const ChildCareHours: React.FC = () => {
     try {
       const res = await fetch('http://localhost:5001/api/HolidayRequests', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer hello_backend' 
+        },
         body: JSON.stringify(requestBody),
       });
       const data = await res.json();
