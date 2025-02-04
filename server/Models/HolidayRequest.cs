@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace HolidayRequestApi.Models
 {
+    //Enum z Converterem do obsługi typów wniosków przesyłanych zapytaniem
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum HolidayType
     {
@@ -13,7 +14,7 @@ namespace HolidayRequestApi.Models
         ChildCareLeaveDays,
         ChildCareLeaveHours
     }
-
+    //Elementy wymagane i nie wymagane wniosku
     public class HolidayRequest
     {
         public int Id { get; set; }

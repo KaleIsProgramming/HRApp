@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using HolidayRequestApi.Models;
 
+//Entity framework do szybkiego zapisywania
+
 namespace HolidayRequestApi.Data
 {
     public class ApplicationDbContext : DbContext

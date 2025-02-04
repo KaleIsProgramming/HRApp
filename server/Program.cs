@@ -4,11 +4,14 @@ using HolidayRequestApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Controllery
 builder.Services.AddControllers();
 
+//EntityFramework do zapisu
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseInMemoryDatabase("HolidayRequestsDb"));
 
+//Ustawienia Cors'ów
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
@@ -16,7 +19,7 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
-
+//Swager
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
