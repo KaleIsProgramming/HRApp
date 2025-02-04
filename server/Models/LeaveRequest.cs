@@ -2,25 +2,25 @@
 using System.Text.Json.Serialization;
 
 
-namespace HolidayRequestApi.Models
+namespace LeaveRequestApi.Models
 {
     //Enum z Converterem do obsługi typów wniosków przesyłanych zapytaniem
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum HolidayType
+    public enum LeaveType
     {
         CircumstantialHoliday,
         VacationLeave,
-        OnDemandHoliday,
+        OnDemandLeave,
         ChildCareLeaveDays,
         ChildCareLeaveHours
     }
     //Elementy wymagane i nie wymagane wniosku
-    public class HolidayRequest
+    public class LeaveRequest
     {
         public int Id { get; set; }
 
         [Required]
-        public HolidayType HolidayType { get; set; }
+        public LeaveType LeaveType { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }

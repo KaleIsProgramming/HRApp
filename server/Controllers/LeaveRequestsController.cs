@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HolidayRequestApi.Models;
-using HolidayRequestApi.Data;
+using LeaveRequestApi.Models;
+using LeaveRequestApi.Data;
 using System.Text.RegularExpressions;
 
-namespace HolidayRequestApi.Controllers
+namespace LeaveRequestApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HolidayRequestsController : ControllerBase
+    public class LeaveRequestsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public HolidayRequestsController(ApplicationDbContext context)
+        public LeaveRequestsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateLeaveRequest([FromBody] HolidayRequest dto)
+        public async Task<IActionResult> CreateLeaveRequest([FromBody] LeaveRequest dto)
         {
             //Sprawdzanie czy posiada token autoryzujący
             var authHeader = Request.Headers["Authorization"].FirstOrDefault();
@@ -54,22 +54,22 @@ namespace HolidayRequestApi.Controllers
             }
 
             // Obsługa różnych typów wniosków
-            switch (dto.HolidayType)
+            switch (dto.LeaveType)
             {
-                case HolidayType.CircumstantialHoliday:
+                case LeaveType.CircumstantialHoliday:
                     if (string.IsNullOrWhiteSpace(dto.OccasionalType))
                         return BadRequest(new { message = "Należy podać typ urlopu okolicznościowego." });
                     if (string.IsNullOrWhiteSpace(dto.PersonName))
                         return BadRequest(new { message = "Należy podać typ urlopu okolicznościowego." });
                     break;
-                case HolidayType.OnDemandHoliday:
+                case LeaveType.OnDemandLeave:
                     if (string.IsNullOrWhiteSpace(dto.SapNumber))
                         return BadRequest(new { message = "Numer SAP jest wymagany w przypadku urlopu na żądanie." });
   
                     if (!Regex.IsMatch(dto.SapNumber, @"^\d{8}$"))
                         return BadRequest(new { message = "Numer SAP musi być ośmio-cyfrowym numerem." });
                     break;
-                case HolidayType.ChildCareLeaveHours:
+                case LeaveType.ChildCareLeaveHours:
                     if (!parsedStartTime.HasValue || !parsedEndTime.HasValue)
                         return BadRequest(new { message = "Należy podać godzinę rozpoczęcia i zakończenia." });
                     if (parsedStartTime >= parsedEndTime)
@@ -79,7 +79,7 @@ namespace HolidayRequestApi.Controllers
             }
 
             //Zapis za pomocą entityframework
-            _context.HolidayRequests.Add(dto);
+            _context.LeaveRequests.Add(dto);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Wniosek został pomyślnie zapisany.", id = dto.Id });

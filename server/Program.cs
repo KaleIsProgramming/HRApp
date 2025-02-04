@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using HolidayRequestApi.Data;
+using LeaveRequestApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 
 //EntityFramework do zapisu
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseInMemoryDatabase("HolidayRequestsDb"));
+    options.UseInMemoryDatabase("LeaveRequestsDb"));
 
 //Ustawienia Cors'ów
 builder.Services.AddCors(options =>
@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "HolidayRequestApi", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "LeaveRequestApi", Version = "v1" });
 });
 
 var app = builder.Build();

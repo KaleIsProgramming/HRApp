@@ -1,9 +1,9 @@
 "use client"
 import React, { useState, FormEvent } from 'react';
-import HolidayTypeSelector from '@/components/HolidayTypeSelector';
+import LeaveTypeSelector from '@/components/LeaveTypeSelector';
 
 interface ChildCareHoursInterface {
-  holidayType: string;
+  leaveType: string;
   startDate: string;
   endDate: string;
   startTime: string;
@@ -80,7 +80,7 @@ const ChildCareHours: React.FC = () => {
     if (!validate()) return;
     e.preventDefault();
     const requestBody: ChildCareHoursInterface = {
-      holidayType: "ChildCareLeaveHours",
+      leaveType: "ChildCareLeaveHours",
       startDate,
       endDate,
       startTime,
@@ -88,9 +88,8 @@ const ChildCareHours: React.FC = () => {
       comment,
     };
     
-    console.log(requestBody)
     try {
-      const res = await fetch('http://localhost:5001/api/HolidayRequests', {
+      const res = await fetch('http://localhost:5001/api/LeaveRequests', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -107,7 +106,7 @@ const ChildCareHours: React.FC = () => {
 
   return (
     <div className="max-w-xl mx-auto p-4">
-      <HolidayTypeSelector />
+      <LeaveTypeSelector />
       <h1 className="text-2xl font-bold mb-4">Opieka nad dzieckiem – godziny</h1>
       {message && <div className="mb-4 p-2 bg-blue-100">{message}</div>}
       <form onSubmit={handleSubmit} className="space-y-4">

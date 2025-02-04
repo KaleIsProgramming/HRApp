@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using HolidayRequestApi.Models;
+using LeaveRequestApi.Models;
 
 //Entity framework do szybkiego zapisywania
 
-namespace HolidayRequestApi.Data
+namespace LeaveRequestApi.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<HolidayRequest> HolidayRequests { get; set; }
+        public DbSet<LeaveRequest> LeaveRequests { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

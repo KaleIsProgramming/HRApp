@@ -2,31 +2,31 @@
 import React, { useState, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
-export type HolidayType =
-  | "circumstantial-holiday"
+export type LeaveType =
+  | "circumstantial-leave"
   | "vacation-leave"
-  | "on-demand-holiday"
+  | "on-demand-leave"
   | "child-care-leave-days"
   | "child-care-leave-hours";
 
-const HolidayTypeSelector: React.FC = () => {
+const LeaveTypeSelector: React.FC = () => {
   const router = useRouter();
-  const [selected, setSelected] = useState<HolidayType | "">("");
+  const [selected, setSelected] = useState<LeaveType | "">("");
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const type = e.target.value as HolidayType;
+    const type = e.target.value as LeaveType;
     setSelected(type);
 
     let route = "";
     switch (type) {
-      case "circumstantial-holiday":
-        route = "/circumstantial-holiday";
+      case "circumstantial-leave":
+        route = "/circumstantial-leave";
         break;
       case "vacation-leave":
         route = "/vacation-leave";
         break;
-      case "on-demand-holiday":
-        route = "/on-demand-holiday";
+      case "on-demand-leave":
+        route = "/on-demand-leave";
         break;
       case "child-care-leave-days":
         route = "/child-care-leave-days";
@@ -43,12 +43,13 @@ const HolidayTypeSelector: React.FC = () => {
   };
 
   return (
-    <div className="w-full p-4 bg-gray-200">
-      <select value={selected} onChange={handleChange} className="p-2 border rounded">
+    <div className="w-full mb-4">
+      <h2 className='text-2xl font-bold'>Wybierz rodzaj wniosku urlopowego</h2>
+      <select value={selected} onChange={handleChange} className="p-2  mt-4 border rounded">
         <option value="">-- Wybierz rodzaj wniosku --</option>
-        <option value="circumstantial-holiday">Urlop okolicznościowy</option>
+        <option value="circumstantial-leave">Urlop okolicznościowy</option>
         <option value="vacation-leave">Urlop wypoczynkowy</option>
-        <option value="on-demand-holiday">Urlop na żądanie</option>
+        <option value="on-demand-leave">Urlop na żądanie</option>
         <option value="child-care-leave-days">Opieka nad dzieckiem – dni</option>
         <option value="child-care-leave-hours">Opieka nad dzieckiem – godziny</option>
       </select>
@@ -56,4 +57,4 @@ const HolidayTypeSelector: React.FC = () => {
   );
 };
 
-export default HolidayTypeSelector;
+export default LeaveTypeSelector;
