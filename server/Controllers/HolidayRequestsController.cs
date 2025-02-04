@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HolidayRequestApi.Models;
 using HolidayRequestApi.Data;
+using System.Text.RegularExpressions;
 
 namespace HolidayRequestApi.Controllers
 {
@@ -17,7 +18,27 @@ namespace HolidayRequestApi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateLeaveRequest([FromBody] HolidayRequest dto)
-        { 
+        {
+            TimeSpan? parsedStartTime = null;
+            TimeSpan? parsedEndTime = null;
+
+            if (!string.IsNullOrWhiteSpace(dto.StartTime))
+            {
+                if (!TimeSpan.TryParseExact(dto.StartTime, @"hh\:mm", null, out var startTime))
+                {
+                    return BadRequest(new { message = "Invalid StartTime format. Use HH:mm (e.g., 08:30)." });
+                }
+                parsedStartTime = startTime;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.EndTime))
+            {
+                if (!TimeSpan.TryParseExact(dto.EndTime, @"hh\:mm", null, out var endTime))
+                {
+                    return BadRequest(new { message = "Invalid EndTime format. Use HH:mm (e.g., 16:45)." });
+                }
+                parsedEndTime = endTime;
+            }
 
             if (dto.StartDate > dto.EndDate)
             {
@@ -36,11 +57,14 @@ namespace HolidayRequestApi.Controllers
                 case HolidayType.OnDemandHoliday:
                     if (string.IsNullOrWhiteSpace(dto.SapNumber))
                         return BadRequest(new { message = "The SAP number is required for on-demand leave." });
+  
+                    if (!Regex.IsMatch(dto.SapNumber, @"^\d{8}$"))
+                        return BadRequest(new { message = "Numer SAP musi być ośmio-cyfrowym numerem." });
                     break;
-                case HolidayType.ChildCareLeaveDays:
-                    if (!dto.StartTime.HasValue || !dto.EndTime.HasValue)
+                case HolidayType.ChildCareLeaveHours:
+                    if (!parsedStartTime.HasValue || !parsedEndTime.HasValue)
                         return BadRequest(new { message = "The start and end time must be provided." });
-                    if (dto.StartTime >= dto.EndTime)
+                    if (parsedStartTime >= parsedEndTime)
                         return BadRequest(new { message = "The start time must be earlier than the end time." });
                     break;
 

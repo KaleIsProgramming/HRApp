@@ -3,35 +3,35 @@ import React, { useState, FormEvent } from 'react';
 import HolidayTypeSelector from '@/components/HolidayTypeSelector';
 
 interface CircumstantialHolidayInterface {
-  leaveType: string;
+  holidayType: string;
   startDate: string;
   endDate: string;
-  okolicznościowyType: string;
-  fullName: string;
+  OccasionalType: string;
+  personName: string;
   comment: string;
 }
 
 interface ErrorsInterface {
   startDate: string;
   endDate: string;
-  okolicznościowyType: string;
-  fullName: string;
+  OccasionalType: string;
+  personName: string;
   comment: string;
 }
 
 const CircumstantialHoliday: React.FC = () => {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
-  const [okolicznościowyType, setOkolicznościowyType] = useState<string>("");
-  const [fullName, setFullName] = useState<string>("");
+  const [OccasionalType, setOccasionalType] = useState<string>("");
+  const [personName, setPersonName] = useState<string>("");
   const [comment, setComment] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
   const [errors, setErrors] = useState<ErrorsInterface>({
     startDate: "",
     endDate: "",
-    okolicznościowyType: "",
-    fullName: "",
+    OccasionalType: "",
+    personName: "",
     comment: ""
   });
 
@@ -40,8 +40,8 @@ const CircumstantialHoliday: React.FC = () => {
     const newErrors = {
       startDate: "",
       endDate: "",
-      okolicznościowyType: "",
-      fullName: "",
+      OccasionalType: "",
+      personName: "",
       comment: ""
     };
 
@@ -57,12 +57,12 @@ const CircumstantialHoliday: React.FC = () => {
       newErrors.endDate = "Data końcowa musi być późniejsza niż data początkowa.";
       valid = false;
     }
-    if (!okolicznościowyType) {
-      newErrors.okolicznościowyType = "To pole jest wymagane.";
+    if (!OccasionalType) {
+      newErrors.OccasionalType = "To pole jest wymagane.";
       valid = false;
     }
-    if (!fullName) {
-      newErrors.fullName = "To pole jest wymagane.";
+    if (!personName) {
+      newErrors.personName = "To pole jest wymagane.";
       valid = false;
     }
     if (comment && comment.length > 500) {
@@ -78,11 +78,11 @@ const CircumstantialHoliday: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     const requestBody: CircumstantialHolidayInterface = {
-      leaveType: "Urlop okolicznościowy",
+      holidayType: "CircumstantialHoliday",
       startDate,
       endDate,
-      okolicznościowyType,
-      fullName,
+      OccasionalType,
+      personName,
       comment,
     };
 
@@ -128,8 +128,8 @@ const CircumstantialHoliday: React.FC = () => {
         <div>
           <label className="block mb-1">Rodzaj urlopu okolicznościowego:</label>
           <select
-            value={okolicznościowyType}
-            onChange={(e) => setOkolicznościowyType(e.target.value)}
+            value={OccasionalType}
+            onChange={(e) => setOccasionalType(e.target.value)}
             className="w-full p-2 border rounded"
           >
             <option value="">-- Wybierz --</option>
@@ -137,17 +137,17 @@ const CircumstantialHoliday: React.FC = () => {
             <option value="Narodziny dziecka">Narodziny dziecka</option>
             <option value="Ślub dziecka">Ślub dziecka</option>
           </select>
-          {errors.okolicznościowyType && <p className="text-red-500 text-sm">{errors.okolicznościowyType}</p>}
+          {errors.OccasionalType && <p className="text-red-500 text-sm">{errors.OccasionalType}</p>}
         </div>
         <div>
           <label className="block mb-1">Imię i Nazwisko osoby:</label>
           <input
             type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            value={personName}
+            onChange={(e) => setPersonName(e.target.value)}
             className="w-full p-2 border rounded"
           />
-          {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
+          {errors.personName && <p className="text-red-500 text-sm">{errors.personName}</p>}
         </div>
         <div>
           <label className="block mb-1">Komentarz:</label>

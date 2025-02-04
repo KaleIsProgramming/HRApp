@@ -3,7 +3,7 @@ import React, { useState, FormEvent } from 'react';
 import HolidayTypeSelector from '@/components/HolidayTypeSelector';
 
 interface OnDemandLeaveInterface {
-  leaveType: string;
+  holidayType: string;
   startDate: string;
   endDate: string;
   sapNumber: string;
@@ -49,6 +49,9 @@ const OnDemandLeave: React.FC = () => {
     if (!sapNumber) {
       newErrors.sapNumber = "To pole jest wymagane.";
       valid = false;
+    } else if (!/^\d{8}$/.test(sapNumber)) {
+      newErrors.sapNumber = "Numer SAP musi być ośmio-cyfrowym numerem.";
+      valid = false;
     }
     if (comment && comment.length > 500) {
       newErrors.comment = "Komentarz nie może przekraczać 500 znaków.";
@@ -62,7 +65,7 @@ const OnDemandLeave: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     const requestBody: OnDemandLeaveInterface = {
-      leaveType: "Urlop na żądanie",
+      holidayType: "OnDemandHoliday",
       startDate,
       endDate,
       sapNumber,

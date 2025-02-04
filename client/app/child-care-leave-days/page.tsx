@@ -3,7 +3,7 @@ import React, { useState, FormEvent } from 'react';
 import HolidayTypeSelector from '@/components/HolidayTypeSelector';
 
 interface ChildCareLeaveDaysInterface {
-  leaveType: string;
+  holidayType: string;
   startDate: string;
   endDate: string;
   comment: string;
@@ -54,11 +54,12 @@ const ChildCareLeaveDays: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     const requestBody: ChildCareLeaveDaysInterface = {
-      leaveType: "Opieka nad dzieckiem – dni",
+      holidayType: "ChildCareLeaveDays",
       startDate,
       endDate,
       comment,
     };
+
 
     try {
       const res = await fetch('http://localhost:5001/api/HolidayRequests', {

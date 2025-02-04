@@ -3,7 +3,7 @@ import React, { useState, FormEvent } from 'react';
 import HolidayTypeSelector from '@/components/HolidayTypeSelector';
 
 interface VactionLeaveInterface {
-  leaveType: string;
+  holidayType: string;
   startDate: string;
   endDate: string;
   comment: string;
@@ -55,7 +55,7 @@ const VacationLeave: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     const requestBody: VactionLeaveInterface = {
-      leaveType: "Urlop wypoczynkowy",
+      holidayType: "VacationLeave",
       startDate,
       endDate,
       comment,

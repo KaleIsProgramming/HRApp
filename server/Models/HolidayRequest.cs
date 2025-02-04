@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 
 namespace HolidayRequestApi.Models
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum HolidayType
     {
         CircumstantialHoliday,
@@ -29,8 +32,8 @@ namespace HolidayRequestApi.Models
 
         public string? SapNumber { get; set; }
 
-        public TimeSpan? StartTime { get; set; }
-        public TimeSpan? EndTime { get; set; }
+        public string? StartTime { get; set; }
+        public string? EndTime { get; set; }
 
         public string? Comment { get; set; }
     }
