@@ -63,7 +63,7 @@ const VacationLeave: React.FC = () => {
     };
 
     try {
-      const res = await fetch('http://localhost:5001/api/LeaveRequests', {
+      const res = await fetch('https://localhost:5001/api/LeaveRequests', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

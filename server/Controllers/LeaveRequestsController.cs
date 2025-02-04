@@ -82,7 +82,7 @@ namespace LeaveRequestApi.Controllers
             _context.LeaveRequests.Add(dto);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Wniosek został pomyślnie Utworzony.", id = dto.Id });
+            return Ok(new { message = "Wniosek został pomyślnie utworzony.", id = dto.Id });
         }
     }
 }
