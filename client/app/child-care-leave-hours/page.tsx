@@ -11,6 +11,14 @@ interface ChildCareHoursInterface {
   comment: string;
 }
 
+interface ErrorsInterface {
+  startDate: string;
+  endDate: string;
+  startTime: string;
+  endTime: string;
+  comment: string;
+}
+
 const ChildCareHours: React.FC = () => {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -19,7 +27,57 @@ const ChildCareHours: React.FC = () => {
   const [comment, setComment] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
+  const [errors, setErrors] = useState<ErrorsInterface>({
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+    comment: ""
+  });
+
+  const validate = () => {
+    let valid = true;
+    const newErrors = {
+      startDate: "",
+      endDate: "",
+      startTime: "",
+      endTime: "",
+      comment: ""
+    };
+    if (!startDate) {
+      newErrors.startDate = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (!endDate) {
+      newErrors.endDate = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+      newErrors.endDate = "Data końcowa musi być późniejsza niż data początkowa.";
+      valid = false;
+    }
+    if (!startTime) {
+      newErrors.startTime = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (!endTime) {
+      newErrors.endTime = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (startTime && endTime && startTime >= endTime) {
+      newErrors.endTime = "Godzina końcowa musi być późniejsza niż godzina początkowa.";
+      valid = false;
+    }
+    if (comment && comment.length > 500) {
+      newErrors.comment = "Komentarz nie może przekraczać 500 znaków.";
+      valid = false;
+    }
+    setErrors(newErrors);
+    return valid;
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    if (!validate()) return;
     e.preventDefault();
     const requestBody: ChildCareHoursInterface = {
       leaveType: "ChildCareLeaveDays",
@@ -31,7 +89,7 @@ const ChildCareHours: React.FC = () => {
     };
 
     try {
-      const res = await fetch('https://localhost:5001/api/HolidayRequests', {
+      const res = await fetch('http://localhost:5001/api/HolidayRequests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
@@ -55,9 +113,9 @@ const ChildCareHours: React.FC = () => {
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.startDate && <p className="text-red-500 text-sm">{errors.startDate}</p>}
         </div>
         <div>
           <label className="block mb-1">Data końcowa:</label>
@@ -65,9 +123,9 @@ const ChildCareHours: React.FC = () => {
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.endDate && <p className="text-red-500 text-sm">{errors.endDate}</p>}
         </div>
         <div>
           <label className="block mb-1">Godzina początkowa:</label>
@@ -75,9 +133,9 @@ const ChildCareHours: React.FC = () => {
             type="time"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.startTime && <p className="text-red-500 text-sm">{errors.startTime}</p>}
         </div>
         <div>
           <label className="block mb-1">Godzina końcowa:</label>
@@ -85,9 +143,9 @@ const ChildCareHours: React.FC = () => {
             type="time"
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.endTime && <p className="text-red-500 text-sm">{errors.endTime}</p>}
         </div>
         <div>
           <label className="block mb-1">Komentarz:</label>
@@ -96,6 +154,7 @@ const ChildCareHours: React.FC = () => {
             onChange={(e) => setComment(e.target.value)}
             className="w-full p-2 border rounded"
           ></textarea>
+          {errors.comment && <p className="text-red-500 text-sm">{errors.comment}</p>}
         </div>
         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
           Zapisz wniosek

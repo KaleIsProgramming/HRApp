@@ -1,6 +1,5 @@
 "use client"
 import React, { useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
 import HolidayTypeSelector from '@/components/HolidayTypeSelector';
 
 interface CircumstantialHolidayInterface {
@@ -12,17 +11,72 @@ interface CircumstantialHolidayInterface {
   comment: string;
 }
 
+interface ErrorsInterface {
+  startDate: string;
+  endDate: string;
+  okolicznościowyType: string;
+  fullName: string;
+  comment: string;
+}
+
 const CircumstantialHoliday: React.FC = () => {
-  const router = useRouter();
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [okolicznościowyType, setOkolicznościowyType] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [comment, setComment] = useState("");
-  const [message, setMessage] = useState("");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [okolicznościowyType, setOkolicznościowyType] = useState<string>("");
+  const [fullName, setFullName] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+
+  const [errors, setErrors] = useState<ErrorsInterface>({
+    startDate: "",
+    endDate: "",
+    okolicznościowyType: "",
+    fullName: "",
+    comment: ""
+  });
+
+  const validate = () => {
+    let valid = true;
+    const newErrors = {
+      startDate: "",
+      endDate: "",
+      okolicznościowyType: "",
+      fullName: "",
+      comment: ""
+    };
+
+    if (!startDate) {
+      newErrors.startDate = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (!endDate) {
+      newErrors.endDate = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+      newErrors.endDate = "Data końcowa musi być późniejsza niż data początkowa.";
+      valid = false;
+    }
+    if (!okolicznościowyType) {
+      newErrors.okolicznościowyType = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (!fullName) {
+      newErrors.fullName = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (comment && comment.length > 500) {
+      newErrors.comment = "Komentarz nie może przekraczać 500 znaków.";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validate()) return;
     const requestBody: CircumstantialHolidayInterface = {
       leaveType: "Urlop okolicznościowy",
       startDate,
@@ -33,7 +87,7 @@ const CircumstantialHoliday: React.FC = () => {
     };
 
     try {
-      const res = await fetch('https://localhost:5001/api/HolidayRequests', {
+      const res = await fetch('http://localhost:5001/api/HolidayRequests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
@@ -57,9 +111,9 @@ const CircumstantialHoliday: React.FC = () => {
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.startDate && <p className="text-red-500 text-sm">{errors.startDate}</p>}
         </div>
         <div>
           <label className="block mb-1">Data końcowa:</label>
@@ -67,16 +121,15 @@ const CircumstantialHoliday: React.FC = () => {
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.endDate && <p className="text-red-500 text-sm">{errors.endDate}</p>}
         </div>
         <div>
           <label className="block mb-1">Rodzaj urlopu okolicznościowego:</label>
           <select
             value={okolicznościowyType}
             onChange={(e) => setOkolicznościowyType(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           >
             <option value="">-- Wybierz --</option>
@@ -84,6 +137,7 @@ const CircumstantialHoliday: React.FC = () => {
             <option value="Narodziny dziecka">Narodziny dziecka</option>
             <option value="Ślub dziecka">Ślub dziecka</option>
           </select>
+          {errors.okolicznościowyType && <p className="text-red-500 text-sm">{errors.okolicznościowyType}</p>}
         </div>
         <div>
           <label className="block mb-1">Imię i Nazwisko osoby:</label>
@@ -91,9 +145,9 @@ const CircumstantialHoliday: React.FC = () => {
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
         </div>
         <div>
           <label className="block mb-1">Komentarz:</label>
@@ -102,6 +156,7 @@ const CircumstantialHoliday: React.FC = () => {
             onChange={(e) => setComment(e.target.value)}
             className="w-full p-2 border rounded"
           ></textarea>
+          {errors.comment && <p className="text-red-500 text-sm">{errors.comment}</p>}
         </div>
         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
           Zapisz wniosek

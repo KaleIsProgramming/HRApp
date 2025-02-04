@@ -1,9 +1,15 @@
 "use client"
 import React, { useState, FormEvent } from 'react';
-import LeaveTypeSelector from '@/components/HolidayTypeSelector';
+import HolidayTypeSelector from '@/components/HolidayTypeSelector';
 
 interface ChildCareLeaveDaysInterface {
   leaveType: string;
+  startDate: string;
+  endDate: string;
+  comment: string;
+}
+
+interface ErrorsInterface {
   startDate: string;
   endDate: string;
   comment: string;
@@ -15,8 +21,38 @@ const ChildCareLeaveDays: React.FC = () => {
   const [comment, setComment] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
+  const [errors, setErrors] = useState<ErrorsInterface>({
+    startDate: "",
+    endDate: "",
+    comment: ""
+  });
+
+  const validate = () => {
+    let valid = true;
+    const newErrors = { startDate: "", endDate: "", comment: "" };
+    if (!startDate) {
+      newErrors.startDate = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (!endDate) {
+      newErrors.endDate = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+      newErrors.endDate = "Data końcowa musi być późniejsza niż data początkowa.";
+      valid = false;
+    }
+    if (comment && comment.length > 500) {
+      newErrors.comment = "Komentarz nie może przekraczać 500 znaków.";
+      valid = false;
+    }
+    setErrors(newErrors);
+    return valid;
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validate()) return;
     const requestBody: ChildCareLeaveDaysInterface = {
       leaveType: "Opieka nad dzieckiem – dni",
       startDate,
@@ -25,7 +61,7 @@ const ChildCareLeaveDays: React.FC = () => {
     };
 
     try {
-      const res = await fetch('https://localhost:5001/api/HolidayRequests', {
+      const res = await fetch('http://localhost:5001/api/HolidayRequests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
@@ -39,7 +75,7 @@ const ChildCareLeaveDays: React.FC = () => {
 
   return (
     <div className="max-w-xl mx-auto p-4">
-      <LeaveTypeSelector />
+      <HolidayTypeSelector />
       <h1 className="text-2xl font-bold mb-4">Opieka nad dzieckiem – dni</h1>
       {message && <div className="mb-4 p-2 bg-blue-100">{message}</div>}
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -49,9 +85,9 @@ const ChildCareLeaveDays: React.FC = () => {
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.startDate && <p className="text-red-500 text-sm">{errors.startDate}</p>}
         </div>
         <div>
           <label className="block mb-1">Data końcowa:</label>
@@ -59,9 +95,9 @@ const ChildCareLeaveDays: React.FC = () => {
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.endDate && <p className="text-red-500 text-sm">{errors.endDate}</p>}
         </div>
         <div>
           <label className="block mb-1">Komentarz:</label>
@@ -70,6 +106,7 @@ const ChildCareLeaveDays: React.FC = () => {
             onChange={(e) => setComment(e.target.value)}
             className="w-full p-2 border rounded"
           ></textarea>
+          {errors.comment && <p className="text-red-500 text-sm">{errors.comment}</p>}
         </div>
         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
           Zapisz wniosek

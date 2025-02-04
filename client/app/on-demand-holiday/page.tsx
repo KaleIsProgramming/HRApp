@@ -10,6 +10,13 @@ interface OnDemandLeaveInterface {
   comment: string;
 }
 
+interface ErrorsInterface {
+  startDate: string;
+  endDate: string;
+  sapNumber: string;
+  comment: string;
+}
+
 const OnDemandLeave: React.FC = () => {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -17,8 +24,43 @@ const OnDemandLeave: React.FC = () => {
   const [comment, setComment] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
+  const [errors, setErrors] = useState<ErrorsInterface>({
+    startDate: "",
+    endDate: "",
+    sapNumber: "",
+    comment: ""
+  });
+
+  const validate = () => {
+    let valid = true;
+    const newErrors = { startDate: "", endDate: "", sapNumber: "", comment: "" };
+    if (!startDate) {
+      newErrors.startDate = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (!endDate) {
+      newErrors.endDate = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+      newErrors.endDate = "Data końcowa musi być późniejsza niż data początkowa.";
+      valid = false;
+    }
+    if (!sapNumber) {
+      newErrors.sapNumber = "To pole jest wymagane.";
+      valid = false;
+    }
+    if (comment && comment.length > 500) {
+      newErrors.comment = "Komentarz nie może przekraczać 500 znaków.";
+      valid = false;
+    }
+    setErrors(newErrors);
+    return valid;
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validate()) return;
     const requestBody: OnDemandLeaveInterface = {
       leaveType: "Urlop na żądanie",
       startDate,
@@ -28,7 +70,7 @@ const OnDemandLeave: React.FC = () => {
     };
 
     try {
-      const res = await fetch('https://localhost:5001/api/HolidayRequests', {
+      const res = await fetch('http://localhost:5001/api/HolidayRequests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
@@ -52,9 +94,9 @@ const OnDemandLeave: React.FC = () => {
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.startDate && <p className="text-red-500 text-sm">{errors.startDate}</p>}
         </div>
         <div>
           <label className="block mb-1">Data końcowa:</label>
@@ -62,9 +104,9 @@ const OnDemandLeave: React.FC = () => {
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.endDate && <p className="text-red-500 text-sm">{errors.endDate}</p>}
         </div>
         <div>
           <label className="block mb-1">Numer SAP:</label>
@@ -72,9 +114,9 @@ const OnDemandLeave: React.FC = () => {
             type="text"
             value={sapNumber}
             onChange={(e) => setSapNumber(e.target.value)}
-            required
             className="w-full p-2 border rounded"
           />
+          {errors.sapNumber && <p className="text-red-500 text-sm">{errors.sapNumber}</p>}
         </div>
         <div>
           <label className="block mb-1">Komentarz:</label>
@@ -83,6 +125,7 @@ const OnDemandLeave: React.FC = () => {
             onChange={(e) => setComment(e.target.value)}
             className="w-full p-2 border rounded"
           ></textarea>
+          {errors.comment && <p className="text-red-500 text-sm">{errors.comment}</p>}
         </div>
         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
           Zapisz wniosek
